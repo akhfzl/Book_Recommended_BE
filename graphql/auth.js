@@ -24,10 +24,12 @@ module.exports = {
         UpdateBookToStudent: auth,
         DeleteABook: auth,
         AddBookRecommendation: auth,
-        BookRecomended: auth
+        BookRecomended: auth,
+        UpdateStudentProfile: auth 
     },
     Query: {
         queries: auth,
-        GetOneStudent: auth
+        GetOneStudent: auth,
+        GetAllBooks: auth
     }
 }

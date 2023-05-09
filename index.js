@@ -21,12 +21,7 @@ const { rncpTitleLoader } = require('./graphql/rncpTitle/rncp.loader')
 
 require('dotenv').config();
 mongoose
-    .connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`, {
-        keepAlive: true,
-        useNewUrlParser: true,
-    })
-    .then(() => console.log('connect'))
-    .catch(err => console.log('disconnect', err))
+    .connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.vhhfocn.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`).then(() => console.log("Database connect")).catch((err) => console.log("Database disconnected"))
 
 //graphql
 const graphql = require('./graphql');

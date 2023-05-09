@@ -103,7 +103,8 @@ const BookSchema = new Schema({
   publication_date: { type: Number },
   pages: { type: Number },
   category_type: { type: String },
-  url_image: {type: String}
+  url_image: {type: String},
+  status: {type: String, default: 'active'}
 })
 
 const BookRecommendersSchema = new Schema({
@@ -116,7 +117,8 @@ const BookRecommendersSchema = new Schema({
 	publisher : { type: String },
 	year_publication : { type: Number },
 	image_url_s : { type: String },
-  category_type: { type: String }
+  category_type: { type: String },
+  status: {type: String, default: 'active'}
 })
 
 const SubjectModel = mongoose.model('subject', SubjectSchema);

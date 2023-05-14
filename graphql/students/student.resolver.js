@@ -1,8 +1,8 @@
 const studentModel = require("./student.model");
 const { BookModel, SubjectModel, BookRecommenderModel } = require("../subjects/subjects.model");
-const { RunScriptPython, randomArray, randomArrays } = require('./student.utilities');
-
-const Moment = require('moment')
+const { RunScriptPython, randomArray, randomArrays, csvHandler } = require('./student.utilities');
+const fs = require('fs');
+const moment = require('moment')
 const { hash, compare } = require("bcrypt");
 const { ApolloError } = require("apollo-server-express");
 const jwt = require("jsonwebtoken");
@@ -137,7 +137,7 @@ async function studentLogin(parent, { email, password }, context) {
       user_id: student._id,
     };
   } else {
-    throw new GraphQLError("Password salah");
+    throw new ApolloError("Password salah");
   }
 }
 
@@ -296,6 +296,39 @@ async function forgetPassword(parent, {input_student_data}, ctx){
   }
 }
 
+async function dashboardAPI(parent, {filter}, ctx){
+  let preprocessing = csvHandler('./dataset/preprocessing.json')
+  const enums = {
+    sains: 'sains-tech',
+    soshum: 'social-humanaria',
+    general: 'general'
+  }
+  let count_sains = 0;
+  let count_soshum = 0;
+  let count_general = 0;
+
+  let counts = preprocessing.map(val => {
+    if(val.target_class === 'sains-tech'){
+      count_sains += 1
+    }
+    if(val.target_class === 'social-humanaria'){
+      count_soshum += 1
+    }
+    if(val.target_class === 'general'){
+      count_general += 1
+    }
+  })
+
+  if(filter && filter.category){
+    preprocessing = preprocessing.filter(val => val.target_class === enums[filter.category])
+  }
+
+  let metadata = preprocessing.map(val => ({title_cleaning: val.text_cleaning, title: val.title, counts: {count_sains, count_general, count_soshum}}))
+  metadata = await randomArrays(metadata)
+
+  return metadata.slice(0, 10)
+}
+
 //loader
 async function book_loaders(parent, args, ctx){
   if(parent.book_id){
@@ -313,7 +346,8 @@ module.exports = {
   Query: {
     queries,
     GetOneStudent,
-    GetAllBooks
+    GetAllBooks,
+    dashboardAPI
   },
   Mutation: {
     BookRecomended,

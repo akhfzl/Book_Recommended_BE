@@ -1,4 +1,5 @@
 const { PythonShell } = require("python-shell");
+const fs = require('fs');
 
 async function RunScriptPython(filename, args){
     let book_type;
@@ -46,8 +47,21 @@ async function randomArrays(arr){
     return arr;
 }
 
+function csvHandler(filename) {
+    const readFile = fs.readFileSync(filename, 'utf-8')
+    let file = JSON.parse(readFile)
+    file.map(val => {
+        if(['Medical', 'Science', 'Psychology'].includes(val.category)){
+            val.target_class === 'sains-tech'
+        }
+        return val
+    })
+    return file
+}
+
 module.exports = {
     RunScriptPython,
     randomArray,
-    randomArrays
+    randomArrays,
+    csvHandler
 }

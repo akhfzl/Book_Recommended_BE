@@ -59,12 +59,38 @@ module.exports = gql`
         Mrs
     }
 
-input studentInput {
+    input studentInput {
         email: String 
         civility: studentCivility
         first_name: String 
         last_name: String 
         psw_str: String 
+    }
+
+    enum dashboardEnum{
+        sains
+        soshum
+        general 
+    }
+
+    input dashboardInput{
+        category: dashboardEnum
+    }
+
+    type countType {
+        count_general: Int 
+        count_sains: Int 
+        count_soshum: Int
+    }
+
+    type outputDashboard{
+        title: String
+        title_cleaning: String
+        counts: countType
+    }
+
+    extend type Query{
+        dashboardAPI(filter: dashboardInput): [outputDashboard]
     }
 
     extend type Mutation{

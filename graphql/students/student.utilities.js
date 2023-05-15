@@ -52,7 +52,7 @@ function csvHandler(filename) {
     let file = JSON.parse(readFile)
     file.map(val => {
         if(['Medical', 'Science', 'Psychology', 'Technology & Engineering'].includes(val.category)){
-            val.target_class === 'sains-tech'
+            val.target_class = 'sains-tech'
         }
         return val
     })

@@ -69,9 +69,9 @@ async function BookRecomended(parent, args, context){
     book_default = await randomArrays(book_default)
     runScript = await RunScriptPython('test.py', book_default[0].title);
   }else{
-    if(book_history && book_history.length){
-      book_history = await randomArrays(book_history)
-    }
+//     if(book_history && book_history.length){
+//       book_history = await randomArrays(book_history)
+//     }
     runScript = await RunScriptPython('test.py', book_history[0].title);
   }
   if(!runScript){

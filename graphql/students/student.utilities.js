@@ -51,7 +51,7 @@ function csvHandler(filename) {
     const readFile = fs.readFileSync(filename, 'utf-8')
     let file = JSON.parse(readFile)
     file.map(val => {
-        if(['Medical', 'Science', 'Psychology'].includes(val.category)){
+        if(['Medical', 'Science', 'Psychology', 'Technology & Engineering'].includes(val.category)){
             val.target_class === 'sains-tech'
         }
         return val

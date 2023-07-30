@@ -14,7 +14,7 @@ async function RunScriptPython(filename, args){
             return JSON.parse(messages)
         })
         .catch(err => {
-            console.log('Rekomendasi gagal')
+            console.log('Rekomendasi gagal -> ', err)
         })
 
     output.map(book => {
@@ -50,12 +50,6 @@ async function randomArrays(arr){
 function csvHandler(filename) {
     const readFile = fs.readFileSync(filename, 'utf-8')
     let file = JSON.parse(readFile)
-    file.map(val => {
-        if(['Medical', 'Science', 'Psychology', 'Technology & Engineering'].includes(val.category)){
-            val.target_class = 'sains-tech'
-        }
-        return val
-    })
     return file
 }
 

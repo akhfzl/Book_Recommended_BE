@@ -14,15 +14,6 @@ module.exports = gql`
         email: String
         civility: String
     }
-    type book_interests{
-        category: String
-        title: String 
-        book_id: books
-    }
-    type bookHistory{
-        title: String 
-        book_id: book_recommender
-    }
     input BookInputPagination{
         limit: Int 
         page: Int
@@ -30,23 +21,6 @@ module.exports = gql`
     input BookInputFilter{
         book_title: String 
         book_author: String 
-    }
-    type book_recommender{
-        _id: ID
-        image_url_m: String
-        book_author: String
-        book_title: String
-        image_url_l: String
-        publisher: String
-        year_publication: Int
-        category_type: String
-        ISBN: String
-        count_document: String 
-    }
-    type responseBookRecommended{
-        book_default: [book_interests]
-        book_history: [bookHistory]
-        book_recommender: [book_recommender]
     }
     extend type Query{
         queries: String
@@ -88,9 +62,36 @@ module.exports = gql`
         title_cleaning: String
         counts: countType
     }
+    type book_interests{
+        category: String
+        title: String 
+        book_id: books
+    }
+    type bookHistory{
+        title: String 
+        book_id: book_recommender
+    }
+    type book_recommender{
+        _id: ID
+        image_url_m: String
+        book_author: String
+        book_title: String
+        image_url_l: String
+        publisher: String
+        year_publication: Int
+        category_type: String
+        ISBN: String
+        count_document: String 
+    }
+    type responseBookRecommended{
+        book_default: [book_interests]
+        book_history: [bookHistory]
+        book_recommender: [book_recommender]
+    }
 
     extend type Query{
         dashboardAPI(filter: dashboardInput): [outputDashboard]
+        testModeling(input: String): String
     }
 
     extend type Mutation{

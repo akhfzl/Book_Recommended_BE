@@ -48,9 +48,11 @@ async function BookRecomended(parent, args, context){
   let subject = await SubjectModel.find({rncp_title:studentLogin.rncp_title}).select('books');
 
   if(studentLogin.book_interest && studentLogin.book_interest.length){
+    console.log(`book_history variable`)
     book_history = studentLogin.book_interest;
-  }
+  } 
   if (subject && subject.length){
+    console.log('book_default variable')
     for(const sub of subject){
       for(const book of sub.books){
         let obj = {}
@@ -65,13 +67,14 @@ async function BookRecomended(parent, args, context){
   }else {
     throw new ApolloError('Tidak ada buku yang perlu di rekomendasi')
   }
-  if(!book_history){
+  
+  if(book_default && book_default.length && !book_history){
+    console.log('book_default logic')
     book_default = await randomArrays(book_default)
     runScript = await RunScriptPython('test.py', book_default[0].title);
   }else{
-    if(book_history && book_history.length){
-      book_history = await randomArrays(book_history)
-    }
+    console.log('book_history logic')
+    book_history = await randomArrays(book_history)
     runScript = await RunScriptPython('test.py', book_history[0].title);
   }
   if(!runScript){
@@ -192,17 +195,23 @@ async function AddBookRecommendation(parent, { book_name, book_id }, ctx) {
     createdAt: new Date(),
   };
 
-  const books = await studentModel.findOneAndUpdate(
-    { _id: ctx.user._id },
-    {
-      $push: {
-        book_interest: book_input,
+  let checkBook = ctx.user.book_interest.some(book => String(book.book_id) === book_id)
+
+  if (checkBook){
+    // return null
+  }else{
+    const books = await studentModel.findOneAndUpdate(
+      { _id: ctx.user._id },
+      {
+        $push: {
+          book_interest: book_input,
+        },
       },
-    },
-    {
-      new: true,
-    }
-  );
+      {
+        new: true,
+      }
+    );
+  }
 
   return books.book_interest;
 }
@@ -332,6 +341,14 @@ async function dashboardAPI(parent, {filter}, ctx){
   return metadata.slice(0, 10)
 }
 
+async function testModeling(parent, {input}, ctx){
+  if(input){
+    return await RunScriptPython('test.py', input);
+  }else{
+    throw new ApolloError('Perlu memasukkan judul buku')
+  }
+}
+
 //loader
 async function book_loaders(parent, args, ctx){
   if(parent.book_id){
@@ -350,7 +367,8 @@ module.exports = {
     queries,
     GetOneStudent,
     GetAllBooks,
-    dashboardAPI
+    dashboardAPI,
+    testModeling
   },
   Mutation: {
     BookRecomended,

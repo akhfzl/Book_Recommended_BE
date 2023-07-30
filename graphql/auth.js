@@ -30,6 +30,8 @@ module.exports = {
     Query: {
         queries: auth,
         GetOneStudent: auth,
-        GetAllBooks: auth
+        GetAllBooks: auth,
+        dashboardAPI: auth,
+        testModeling: auth
     }
 }
